@@ -1,0 +1,28 @@
+# ============================================================================
+# Streamlit Configuration - Production Settings
+# ============================================================================
+
+[server]
+headless = true
+port = 8501
+address = "0.0.0.0"
+enableCORS = true
+enableXsrfProtection = true
+maxErrorLogMessageLength = 40
+
+[browser]
+serverAddress = ""
+gatherUsageStats = false
+displayErrorDetails = false
+
+[theme]
+primaryColor = "#1f77b4"
+backgroundColor = "#0a0e27"
+secondaryBackgroundColor = "#16213e"
+textColor = "#e0e0e0"
+
+[logger]
+level = "error"
+
+[client]
+showErrorDetails = false

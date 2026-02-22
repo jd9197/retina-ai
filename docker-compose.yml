@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  # FastAPI Backend
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: retina_ai_api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./results:/app/results
+      - ./deployment:/app/deployment
+    environment:
+      - CUDA_VISIBLE_DEVICES=0
+      - PYTHONUNBUFFERED=1
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    depends_on:
+      - db
+    networks:
+      - retina_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Streamlit Dashboard
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: retina_ai_dashboard
+    command: streamlit run frontend/dashboard.py --server.port 8501 --server.address 0.0.0.0
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./results:/app/results
+      - ./deployment:/app/deployment
+    environment:
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - api
+    networks:
+      - retina_network
+    restart: unless-stopped
+
+  # PostgreSQL Database (Optional - for production)
+  db:
+    image: postgres:15-alpine
+    container_name: retina_ai_db
+    environment:
+      POSTGRES_USER: retina_user
+      POSTGRES_PASSWORD: retina_secure_password_123
+      POSTGRES_DB: retina_ai
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - retina_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U retina_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Nginx Reverse Proxy (for production)
+  nginx:
+    image: nginx:alpine
+    container_name: retina_ai_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deployment/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./deployment/certs:/etc/nginx/certs:ro
+    depends_on:
+      - api
+      - dashboard
+    networks:
+      - retina_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  retina_network:
+    driver: bridge

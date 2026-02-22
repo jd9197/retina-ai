@@ -1,0 +1,46 @@
+# ============================================================================
+# Retina AI - Production Requirements (Exact Versions)
+# ============================================================================
+
+# Core Deep Learning (CPU optimized)
+torch==2.10.0+cpu
+torchvision==0.25.0+cpu
+timm==1.0.24
+
+# Web & API Framework
+streamlit==1.54.0
+fastapi==0.129.2
+uvicorn[standard]==0.41.0
+starlette==0.52.1
+
+# Image & Data Processing
+Pillow==12.1.1
+opencv-python==4.13.0.92
+numpy==2.4.2
+pandas==2.3.3
+
+# ML Utilities
+scikit-learn==1.8.0
+scipy==1.17.0
+
+# API & HTTP
+requests==2.32.5
+python-multipart==0.0.22
+httpx==0.28.1
+
+# Configuration & Utils
+python-dotenv==1.2.1
+pydantic==2.12.5
+psutil==7.2.2
+
+# Visualization
+plotly==6.5.2
+matplotlib==3.8.0
+
+# Server & Deployment
+gunicorn==25.1.0
+watchfiles==1.1.1
+
+# HuggingFace Integration
+huggingface-hub==1.4.1
+safetensors==0.7.0
