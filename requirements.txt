@@ -2,9 +2,9 @@
 # Retina AI - Production Requirements (Exact Versions)
 # ============================================================================
 
-# Core Deep Learning (CPU optimized)
-torch==2.10.0+cpu
-torchvision==0.25.0+cpu
+# Core Deep Learning
+torch==2.10.0
+torchvision==0.25.0
 timm==1.0.24
 
 # Web & API Framework
