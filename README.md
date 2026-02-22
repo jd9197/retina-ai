@@ -1,6 +1,6 @@
 ---
 title: Retina AI - Retinitis Pigmentosa Diagnostic
-emoji: eyes
+emoji: 👁️
 colorFrom: blue
 colorTo: green
 sdk: streamlit
